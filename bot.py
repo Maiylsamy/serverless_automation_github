@@ -56,9 +56,9 @@ payload = {
 }
 
 response = requests.post(gemini_url, json=payload).json()
-answer = text.strip()
-text = response["candidates"][0]["content"]["parts"][0]["text"]
 
+text = response["candidates"][0]["content"]["parts"][0]["text"]
+answer = text.strip()
 # Save state
 state = {"answer": answer}
 with open("quiz_state.json", "w") as f:
