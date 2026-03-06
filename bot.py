@@ -45,13 +45,21 @@ Continue until 5 patterns.
 
 gemini_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
 
-payload = {"contents": [{"parts": [{"text": prompt}]}]}
+payload = {
+    "contents": [
+        {
+            "parts": [
+                {"text": prompt}
+            ]
+        }
+    ]
+}
 
 response = requests.post(gemini_url, json=payload).json()
 
 text = response["candidates"][0]["content"]["parts"][0]["text"]
 
-# Extract answer (simple approach)
+# Extract answer
 answer = text.split("Answer:")[-1].strip()
 
 # Save state
@@ -59,7 +67,14 @@ state = {"answer": answer}
 with open("quiz_state.json", "w") as f:
     json.dump(state, f)
 
-message = f"📘 Sentence:\n{quote}\n\n{text}"
+message = f"📘 Daily English Practice\n\n{text}"
 
 telegram_url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-requests.post(telegram_url, data={"chat_id": CHAT_ID, "text": message})
+
+requests.post(
+    telegram_url,
+    data={
+        "chat_id": CHAT_ID,
+        "text": message
+    }
+)
